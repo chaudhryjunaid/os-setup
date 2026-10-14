@@ -1,0 +1,3 @@
+# Snap apps: <name> [extra snap install flags]. firefox ships with Ubuntu.
+onlyoffice-desktopeditors
+foliate

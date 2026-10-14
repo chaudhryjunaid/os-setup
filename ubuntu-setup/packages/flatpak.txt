@@ -1,0 +1,2 @@
+# Flathub app IDs (system installation).
+it.mijorus.gearlever

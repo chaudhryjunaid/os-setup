@@ -1,0 +1,2 @@
+# Installed only when an Intel GPU is detected.
+linux-firmware-intel-graphics intel-media-va-driver

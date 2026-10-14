@@ -1,0 +1,20 @@
+# Ubuntu-archive packages, in the order they were installed on the reference machine.
+# One or more package names per line; # starts a comment.
+kitty
+curl
+vim git
+zsh unzip ca-certificates fontconfig vim-gtk3 fzf ripgrep bat tmux wl-clipboard xclip xsel
+git-delta duf tmuxinator zoxide eza liquidprompt
+gnome-shell-extension-manager gnome-tweaks
+wget zip build-essential pkg-config htop btop iotop ncdu fd-find jq tree openssh-client openssh-server gnupg smartmontools
+python3-pip python3-venv shellcheck
+lm-sensors
+procs restic
+libfuse2t64          # AppImages
+flatpak
+util-linux-extra
+solaar               # Logitech devices
+qemu-system-x86 qemu-utils libvirt-daemon-system libvirt-clients virt-manager ovmf swtpm
+gnome-boxes
+libgl1-mesa-dri mesa-vulkan-drivers mesa-utils vulkan-tools vainfo
+alacritty
