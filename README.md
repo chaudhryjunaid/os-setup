@@ -1,3 +1,6 @@
+> [!WARNING]
+> THIS REPOSITORY IS CURRENTLY UNMAINTAINED AND NEEDS WORK BEFORE IT CAN BE CONSIDERED FOR SAFE USE.
+
 # os-setup
 
 Scripts that rebuild my dev machines after a reinstall, one directory per OS.
