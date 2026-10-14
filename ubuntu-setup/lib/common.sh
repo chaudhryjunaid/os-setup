@@ -67,10 +67,3 @@ confirm() {  # confirm "Question" -> 0 on yes (default no)
     case "$reply" in [yY]|[yY][eE][sS]) return 0 ;; *) return 1 ;; esac
 }
 
-# True when the SSH key is registered with GitHub. (ssh -T always exits 1, so
-# check its message rather than its status.)
-github_ssh_ok() {
-    local out
-    out="$(ssh -o BatchMode=yes -o StrictHostKeyChecking=accept-new -o ConnectTimeout=10 -T git@github.com 2>&1 || true)"
-    [[ "$out" == *"successfully authenticated"* ]]
-}

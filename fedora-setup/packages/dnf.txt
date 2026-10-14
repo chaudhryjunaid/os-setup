@@ -1,0 +1,9 @@
+# Fedora packages, grouped by purpose.
+# One or more package names per line; # starts a comment.
+gcc gcc-c++ make                       # build tools
+git curl wget ca-certificates gnupg2
+unzip zip
+vim-enhanced htop jq tree
+openssh-clients
+python3-pip                            # venv ships with python3
+flatpak                                # needed by steps/60-flatpak.sh

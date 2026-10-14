@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# setup.sh — rebuild this dev machine on a fresh Ubuntu install.
+# setup.sh — set up a fresh Ubuntu install as a basic dev machine.
 # Runs steps/NN-*.sh in numeric order. Every step is safe to re-run.
 #
 # Usage:
 #   ./setup.sh             # run all steps
 #   ./setup.sh --from 50   # resume from step 50
-#   ./setup.sh --only 70   # run just step 70
+#   ./setup.sh --only 60   # run just step 60
 
 # shellcheck source=lib/common.sh
 source "$(dirname -- "${BASH_SOURCE[0]}")/lib/common.sh"

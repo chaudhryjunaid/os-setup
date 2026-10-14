@@ -1,59 +1,33 @@
 # fedora-setup
 
-One-shot setup for a Fedora 44 Workstation, adapted from my RHEL 10 setup
-(`../rhel-setup`) and this machine's actual state (repos, installed packages,
-flatpaks, shell history).
+Turns a fresh Fedora 44 install into a basic dev machine. Plain bash, no menus, and every step is safe to re-run.
 
 ## Usage
 
-On a freshly installed Fedora 44 Workstation:
-
 ```sh
-./setup.sh
+sudo dnf install -y git
+git clone https://github.com/chaudhryjunaid/os-setup
+os-setup/fedora-setup/setup.sh
 ```
 
-Safe to re-run — every step skips what's already present, and third-party
-packages are installed best-effort.
+It asks for your sudo password once. The only other prompts are optional: whether to generate an SSH key, and your git name and email if they aren't set. With no terminal to ask on, they're skipped.
 
-## How this differs from the RHEL setup
+```sh
+./setup.sh --from 60   # resume after a failure
+./setup.sh --only 95   # re-run one step
+```
 
-- No `subscription-manager` — Fedora needs no registration.
-- **RPM Fusion** (free + nonfree) replaces EPEL/CRB, which also makes
-  `ffmpeg` installable.
-- Modern CLI tools RHEL pulled from cargo/curl are **packaged natively**
-  here, so they come from dnf: `eza`, `du-dust`, `zoxide`, `git-delta`,
-  `tealdeer`, `hyperfine`, `k9s`, `shfmt`. Cargo is only a fallback.
-- Docker uses the official **Fedora** Docker CE repo.
+## Steps
 
-## What it does
+| Step | What it does |
+|---|---|
+| `10-dnf-base` | `dnf upgrade`, then the packages in `packages/dnf.txt` |
+| `60-flatpak` | adds the Flathub remote (or enables it, if it's there but disabled), then the apps in `packages/flatpak.txt` (empty by default) |
+| `95-post` | offers to generate an ed25519 SSH key, and asks for git `user.name` and `user.email` if they're unset |
 
-- **Repos**: RPM Fusion free+nonfree, Docker CE (Fedora), GitHub CLI,
-  Google Cloud CLI, Chrome, MongoDB 8.0 (el9 repo — no Fedora packages),
-  VS Code, Sublime, TablePlus, Beyond Compare 5, Flathub
-- **Docker**: removes the podman stack, installs Docker CE + compose/buildx,
-  enables the service, adds user to the `docker` group
-- **CLI tooling**: build toolchain, python/pipx/uv, go, rust/cargo, fzf,
-  ripgrep, bat, fd, eza, dust, zoxide, delta, btop, just, yq, mongosh +
-  mongo tools, gcloud, kubectl, helm, opentofu, k9s, pandoc/texlive, ffmpeg,
-  hardware & monitoring utils
-- **fnm** + Node 26 (default)
-- **Desktop apps**: kitty, VS Code, Sublime Text/Merge, Beyond Compare,
-  TablePlus, Chrome stable+beta, GNOME tweaks/extensions, LibreOffice
-- **Flatpaks**: Obsidian, Slack, Zoom, Postman, Compass, DbGate, RedisInsight,
-  DBeaver, Meld, Mission Center, Remmina, OnlyOffice
-- **Virtualization**: qemu-kvm/libvirt/virt-manager, user in `libvirt` group
-- **Cockpit** + PCP monitoring, sysstat, tuned
-- **Fonts**: Noto/Liberation/DejaVu/JetBrains Mono/Inter rpms + CascadiaCode
-  and JetBrainsMono Nerd Fonts
-- **Shell**: zsh as login shell, liquidprompt + antidote into `~/sh`,
-  clones [rcfiles](https://github.com/chaudhryjunaid/rcfiles) into `~/setup`
-- **Standalone installers**: Claude Code, Zed
-- **GNOME**: kitty as default terminal, dash-to-dock + appindicator enabled
+## Customizing
 
-## After running
+- **Packages and apps:** edit `packages/*.txt`. Put one or more names on a line; `#` starts a comment. Installed packages are skipped, and a name dnf doesn't know (renamed or retired in a newer release) is skipped with a warning rather than failing the run.
+- **New steps:** add a `steps/NN-name.sh` that sources `../lib/common.sh` first, like the existing ones. Steps run in numeric order. Keep yours safe to re-run by checking before installing.
 
-1. `cd ~/setup/rcfiles && ./configure.sh && ./setup-git-identity.sh`
-2. Log out/in (zsh, docker/libvirt groups, fonts)
-3. `gh auth login`
-4. `gcloud init && gcloud auth application-default login`
-5. WebStorm: extract JetBrains tarball to `~/.local/webstorm`
+Packages come only from Fedora's own repositories: this setup adds no third-party repositories or keys, including RPM Fusion. If you want RPM Fusion (for codecs or `ffmpeg`), enable it first by following [its instructions](https://rpmfusion.org/Configuration).

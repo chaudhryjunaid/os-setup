@@ -1,48 +1,34 @@
 # ubuntu-setup
 
-Rebuilds my Ubuntu dev machine after a reinstall: apps, dev toolchains and dotfiles, in a fixed order, with no menus. Everything is plain bash, and every step is safe to re-run.
+Turns a fresh Ubuntu 26.04 install into a basic dev machine. Plain bash, no menus, and every step is safe to re-run.
 
-The app set is taken from what is actually installed on the reference machine (Ubuntu 26.04 "resolute"). Dotfiles come from [rcfiles](https://github.com/chaudhryjunaid/rcfiles). Work repos are never cloned.
-
-## Fresh machine
+## Usage
 
 ```sh
 sudo apt install -y git
-git clone https://github.com/chaudhryjunaid/os-setup ~/setup/os-setup
-~/setup/os-setup/ubuntu-setup/setup.sh
+git clone https://github.com/chaudhryjunaid/os-setup
+os-setup/ubuntu-setup/setup.sh
 ```
 
-It asks for sudo once. After that it only prompts for things it can't know: git identity, where your private fonts are, and whether to generate an SSH key. Log out and back in when it finishes.
+It asks for your sudo password once. The only other prompts are optional: whether to generate an SSH key, and your git name and email if they aren't set. With no terminal to ask on, they're skipped.
 
 ```sh
 ./setup.sh --from 50   # resume after a failure
-./setup.sh --only 70   # re-run one step
+./setup.sh --only 60   # re-run one step
 ```
 
 ## Steps
 
 | Step | What it does |
 |---|---|
-| `10-apt-base` | Ubuntu-archive packages (`packages/apt.txt`), plus Intel GPU drivers when an Intel GPU is present |
-| `50-snaps` | OnlyOffice, Foliate |
-| `60-flatpak` | Gear Lever |
-| `70-manual-installs` | Claude Code, Zed, Google Cloud SDK |
-| `80-toolchains` | fnm + Node 26, uv, rustup, Go, Java |
-| `85-fonts` | private fonts, copied from a folder you give it |
-| `88-groups-services` | libvirt/kvm groups; libvirtd service |
-| `90-dotfiles` | clone rcfiles and run its `install.sh`: antidote, bob + Neovim, tree-sitter, Nerd Fonts, zsh as login shell, dotfile links, git identity |
-| `95-post` | optional SSH key, then the list of manual sign-ins |
+| `10-apt-base` | `apt-get update`, then the packages in `packages/apt.txt`. With an Intel GPU, also `packages/apt-intel.txt` (graphics firmware and the VA-API video driver). |
+| `50-snaps` | Snap Store apps in `packages/snap.txt` (empty by default) |
+| `60-flatpak` | adds the Flathub remote, then the apps in `packages/flatpak.txt` (empty by default) |
+| `95-post` | offers to generate an ed25519 SSH key, and asks for git `user.name` and `user.email` if they're unset |
 
-Package lists are in the order things were installed on the reference machine.
+## Customizing
 
-## Keeping it in sync
+- **Packages and apps:** edit `packages/*.txt`. Put one or more names on a line; `#` starts a comment. Installed packages are skipped, and a name apt doesn't know (renamed or dropped in a newer release) is skipped with a warning rather than failing the run.
+- **New steps:** add a `steps/NN-name.sh` that sources `../lib/common.sh` first, like the existing ones. Steps run in numeric order. Keep yours safe to re-run by checking before installing.
 
-After installing or removing something on the reference machine:
-
-```sh
-bin/inventory.sh
-```
-
-It lists what's installed but not in `packages/*.txt` (`+`), and what's listed but missing (`-`). Update the lists by hand so the order is kept. Only Ubuntu-archive packages go in the apt lists: this setup adds no third-party apt repos or keys.
-
-The only pinned version is `NODE_VERSION` (a major version) in `steps/80-toolchains.sh`. Everything else installs the latest release, so don't add installs that download a hardcoded version.
+Packages come only from the Ubuntu archive: this setup adds no third-party apt repositories or keys.
