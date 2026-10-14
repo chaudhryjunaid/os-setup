@@ -1,6 +1,3 @@
-> [!WARNING]
-> THIS REPOSITORY IS CURRENTLY UNMAINTAINED AND NEEDS WORK BEFORE IT CAN BE CONSIDERED FOR SAFE USE.
-
 # os-setup
 
 Small, re-runnable bash scripts that turn a fresh Ubuntu or Fedora install into a basic dev machine. Read the package lists, change what you like, run one command.
