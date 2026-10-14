@@ -16,7 +16,7 @@ warn() { printf '    WARN: %s\n' "$*" >&2; }
 
 have() { command -v "$1" >/dev/null 2>&1; }
 
-pkg_installed() { rpm -q --quiet "$1"; }
+pkg_installed() { rpm -q --quiet --whatprovides "$1"; }
 
 # Print the entries of a packages/*.txt list: strips comments and blank lines.
 read_list() {
